@@ -39,6 +39,8 @@ class LeaveManager
     {
         $this->om->persist($leave);
         $this->om->flush();
+        
+        return $leave;
     }
 
     public function delete(Leave $leave)
@@ -52,16 +54,53 @@ class LeaveManager
         $this->om->persist($leave);
         $this->om->flush();
     }
-
-    //repositories method
-
-    public function getAll()
+    
+    /**
+     * Describe csv format: 
+     * 
+     * @param Year $year
+     * @param file $file
+     */
+    public function import(Year $year, $file)
     {
-        return $this->repo->findAll();
+        $lines = str_getcsv(file_get_contents($file), PHP_EOL);
+        $this->om->startFlushSuite();
+        $leaves = array();
+        
+        foreach ($lines as $line) {
+            $datas = str_getcsv($line, ';');
+            $leave = new Leave();
+            $name = $datas[0];
+             
+            //faudra faire gaffe au format de la date.
+            $begin = $datas[1];   
+            $end = null;
+             
+            if (isset($datas[2])) {
+                //faudra faire gaffe au format de la date.
+                $end = $datas[2];
+            }
+             
+            $leave->setName($name);
+            $leave->setBegin($begin);
+            $leave->setEnd($end);
+            $leave->setYear($year);
+            $leaves[] = $this->create($leave);
+        }
+        
+        $this->om->endFlushSuite();
+        
+        return $leaves;
     }
-
-    public function import(Year $year)
+    
+    //repositories method
+    public function getByYear(Year $year)
     {
-        //a file should be able to be imported with the leaves list because it's more practical !
+        return $this->repo->findBy(array('year' => $year));
+    }
+    
+    public function getLeavesByPeriod(Period $period)
+    {
+        
     }
 }

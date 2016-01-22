@@ -25,12 +25,17 @@ class YearManager
 
     /**
      * @DI\InjectParams({
-     *      "om"   = @DI\Inject("claroline.persistence.object_manager")
+     *      "om"            = @DI\Inject("claroline.persistence.object_manager"),
+     *      "periodManager" = @DI\Inject("claroline.manager.calendar.period_manager") 
      * })
      */
-    public function __construct(ObjectManager $om)
+    public function __construct(
+        ObjectManager $om, 
+        PeriodManager $periodManager
+    )
     {
         $this->om = $om;
+        $this->periodManager = $periodManager;
         $this->repo = $this->om->getRepository('ClarolineCoreBundle:Calendar\Year');
     }
 
@@ -52,8 +57,22 @@ class YearManager
         $this->om->flush();
     }
 
-    public function resize($begin, $end)
+    public function resize(Year $year, $begin, $end)
     {
+        
+        if ($end < $year->getEnd()) {
+            
+            
+        //recup la dernière periode
+            $period = $this->getLastPeriod($year);
+            //si jamais le début de la période est après la fin de l'année qu'elle est supposée occuper,
+            //on a un problème et donc on arrête tout.
+            if ($end < $period->getBegin()) {
+                throw new \Exception('boom');
+            }
+            
+            $this->periodManager->resize($period, $period->getBegin(), $end);
+        }
         //do not forget to trim / add the last/first period or stuff like this
     }
 
@@ -62,5 +81,10 @@ class YearManager
     public function getAll()
     {
         return $this->repo->findAll();
+    }
+    
+    public function getLastPeriod(Year $year)
+    {
+        
     }
 }

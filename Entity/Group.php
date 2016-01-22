@@ -84,12 +84,22 @@ class Group extends AbstractRoleSubject implements OrderableInterface
      * @ORM\JoinTable(name="claro_workspace_model_group")
      */
     protected $models;
+    
+    /**
+     * @ORM\OneToMany(
+     *     targetEntity="Claroline\CoreBundle\Entity\Calendar\Event",
+     *     mappedBy="group",
+     *     cascade={"persist"}
+     * )
+     */
+    protected $events;
 
     public function __construct()
     {
         parent::__construct();
         $this->users  = new ArrayCollection();
         $this->models = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     public function getId()

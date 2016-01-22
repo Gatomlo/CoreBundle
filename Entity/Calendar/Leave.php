@@ -34,12 +34,24 @@ class Leave
     protected $id;
 
     /**
-     * @ORM\Column(name="date", type="datetime")
-     * @Assert\NotBlank()
+     * @ORM\Column(name="begin", type="datetime")
      * @Groups({"api"})
      */
-    protected $date;
-
+    protected $begin;
+    
+    /**
+     * @ORM\Column(name="end", type="datetime", nullable=true)
+     * @Groups({"api"})
+     */
+    protected $end;
+    
+    /**
+     * @ORM\Column()
+     * @Assert\NotBlank()
+     * @Groups({"api", "admin"})
+     */
+    protected $name;
+    
     /**
      * @ORM\ManyToOne(
      *     targetEntity="Claroline\CoreBundle\Entity\Calendar\Year",
@@ -55,16 +67,36 @@ class Leave
         return $this->id;
     }
 
-    public function setDate($date)
+    public function setBegin($begin)
     {
-        $this->date = $date;
+        $this->begin = $begin;
     }
 
-    public function getDate()
+    public function getBegin()
     {
-        return $this->date;
+        return $this->begin;
+    }
+    
+    function getEnd() 
+    {
+        return $this->end;
     }
 
+    function setEnd($end) 
+    {
+        $this->end = $end;
+    }
+
+    function getName() 
+    {
+        return $this->name;
+    }
+
+    function setName($name) 
+    {
+        $this->name = $name;
+    }
+    
     public function setYear(Year $year)
     {
         $this->year = $year;

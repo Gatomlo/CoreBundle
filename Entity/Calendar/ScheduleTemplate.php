@@ -52,7 +52,7 @@ class ScheduleTemplate
     /**
      * @ORM\Column(nullable=true)
      */
-    protected $name;
+    protected $group;
 
     /**
      * @ORM\Column()
@@ -70,14 +70,14 @@ class ScheduleTemplate
      */
     protected $endHour;
 
-    public function setName($name)
+    public function setGroup($group)
     {
-        $this->name = $name;
+        $this->group = $group;
     }
 
-    public function getName()
+    public function getGroup()
     {
-        return $this->name;
+        return $this->group;
     }
 
     public function setDay($day)

@@ -16,6 +16,7 @@ use Claroline\CoreBundle\Persistence\ObjectManager;
 use Claroline\CoreBundle\Entity\Calendar\TimeSlot;
 use Claroline\CoreBundle\Entity\Calendar\Year;
 use Claroline\CoreBundle\Entity\Calendar\Period;
+use Claroline\CoreBundle\Entity\Calendar\ScheduleTemplate;
 
 /**
  * @DI\Service("claroline.manager.calendar.time_slot_manager")
@@ -71,8 +72,13 @@ class TimeSlotManager
         return $this->repo->findByPeriod($period);
     }
 
-    public function buildFromTemplate($templateName)
+    public function buildTimeSlots(Period $period, $groupTemplate)
     {
-        //do complicated stuff here
+        //$templates = ...
+        
+        foreach ($templates as $template) {
+            
+        }        
+             
     }
 }

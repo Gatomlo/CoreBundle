@@ -52,17 +52,21 @@ class PeriodManager
         $this->om->flush();
     }
 
-    public function resize($begin, $end)
+    public function resize(Period $period, $begin, $end)
     {
         //you may want to trim timeslots if you reduce it
         //so let's do stuff here
     }
-
-
+    
     //repositories method
 
     public function getAll()
     {
         return $this->repo->findAll();
+    }
+    
+    public function getByYear(Year $year)
+    {
+        return $this->repo->findBy(array('year' => $year));
     }
 }

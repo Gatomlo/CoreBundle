@@ -64,6 +64,16 @@ class Event
 
     /**
      * @ORM\ManyToOne(
+     *     targetEntity="Claroline\CoreBundle\Entity\Group",
+     *     cascade={"persist"},
+     *     inversedBy="events"
+     * )
+     * @ORM\JoinColumn(name="group_id", onDelete="CASCADE", nullable=true)
+     */
+    protected $group;
+    
+    /**
+     * @ORM\ManyToOne(
      *     targetEntity="Claroline\CoreBundle\Entity\Workspace\Workspace",
      *     cascade={"persist"},
      *     inversedBy="events"

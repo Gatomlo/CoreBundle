@@ -15,6 +15,10 @@ use JMS\DiExtraBundle\Annotation as DI;
 use Claroline\CoreBundle\Persistence\ObjectManager;
 use Claroline\CoreBundle\Entity\Calendar\Event;
 
+use Claroline\CoreBundle\Entity\Workspace\Workspace;
+use Claroline\CoreBundle\Entity\Group;
+use Claroline\CoreBundle\Entity\User;
+
 /**
  * @DI\Service("claroline.manager.calendar.event_manager")
  */
@@ -52,10 +56,56 @@ class EventManager
         $this->om->flush();
     }
 
-    //repositories method
-    
-    public function getAll()
+    /**
+     * @param mixed $object a Group, a Workspace, or a User
+     * @param \DateTime $begin
+     * @param \DateTime $end
+     * @param string $type
+     * @return Event
+     * @throws \Exception
+     */
+    public function getBy($object, $begin, $end, $type = null)
     {
-        return $this->repo->findAll();
+        $allowedClass = [
+            'Claroline\CoreBundle\Entity\User',
+            'Claroline\CoreBundle\Entity\Group',
+            'Claroline\CoreBundle\Entity\Workspace\Workspace',
+        ];
+        
+        $class = get_class($object);
+        
+        if (!in_array($class, $allowedClass)) {
+            throw new \Exception('Class ' . $class . ' is not allowed (only allow ' . var_export($allowedClass, true) . ')');
+        }
+        
+        switch ($class) {
+            case 'Claroline\CoreBundle\Entity\User': return $this->getByUser($object, $begin, $end, $type); break;
+            case 'Claroline\CoreBundle\Entity\Group': return $this->getByGroup($object, $begin, $end, $type); break;
+            case 'Claroline\CoreBundle\Entity\Workspace\Workspace': return $this->getByWorkspace($object, $begin, $end, $type); break;
+        }
+    
     }
+        
+    private function getByWorkspace(Workspace $workspace, $begin, $end, $type = null) 
+    {
+        return ($type) ? 
+            $this->repo->findBy(array('workspace' => $workspace, 'type' => $type, 'begin' => $begin, 'end' => $end)):
+            $this->repo->findBy(array('workspace' => $workspace, 'begin' => $begin, 'end' => $end));
+    }
+    
+    private function getByGroup(Group $group, $begin, $end, $type = null) 
+    {
+        return ($type) ? 
+            $this->repo->findBy(array('group' => $group, 'type' => $type, 'begin' => $begin, 'end' => $end)):
+            $this->repo->findBy(array('group' => $group, 'begin' => $begin, 'end' => $end));
+    }
+    
+    private function getByUser(User $user, $begin, $end, $type = null) 
+    {
+        return ($type) ? 
+            $this->repo->findBy(array('user' => $user, 'type' => $type, 'begin' => $begin, 'end' => $end)):
+            $this->repo->findBy(array('user' => $user, 'begin' => $begin, 'end' => $end));
+    }
+           
+
 }
