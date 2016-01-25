@@ -95,6 +95,15 @@ class Event
      * @ORM\Column(type="json_array", nullable=true)
      */
     protected $details;
+    
+     /**
+     * @ORM\ManyToOne(
+     *     targetEntity="Claroline\CoreBundle\Entity\Calendar\Repetition",
+     *     cascade={"persist"}
+     * )
+     * @ORM\JoinColumn(name="repetition_id", onDelete="CASCADE", nullable=false)
+     */
+    protected $repetition;
 
     public function getId()
     {
@@ -170,4 +179,22 @@ class Event
     {
         return $this->timeSlot;
     }
+    
+    function getGroup() {
+        return $this->group;
+    }
+
+    function getRepetition() {
+        return $this->repetition;
+    }
+
+    function setGroup($group) {
+        $this->group = $group;
+    }
+
+    function setRepetition($repetition) {
+        $this->repetition = $repetition;
+    }
+
+
 }

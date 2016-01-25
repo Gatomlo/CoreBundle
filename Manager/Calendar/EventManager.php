@@ -43,19 +43,91 @@ class EventManager
         $this->om->persist($event);
         $this->om->flush();
     }
-
+    
+    public function createDaily(Event $event, $finaldate)
+    {
+        /**
+         * Add methode for create the same event each day  => use the Entity repetition
+         */
+        $this->om->persist($event);
+        $this->om->flush();
+    }
+    
+    public function createWorkingDay(Event $event, $finaldate)
+    {   
+        /**
+         * Add methode for create the same event each working day  => use the Entity repetition
+         */
+        $this->om->persist($event);
+        $this->om->flush();
+    }
+    
+    public function createWeekly(Event $event, $finaldate)
+    {   
+        /**
+         * Add methode for create the same event each week  => use the Entity repetition
+         */
+        $this->om->persist($event);
+        $this->om->flush();
+    }
+    
+    public function createDubbleWeekly(Event $event, $finaldate)
+    {   
+        /**
+         * Add methode for create the same event each two weeks  => use the Entity repetition
+         */
+        $this->om->persist($event);
+        $this->om->flush();
+    }
+    
+    public function createMonthly(Event $event, $finaldate)
+    {   
+        /**
+         * Add methode for create the same event each month  => use the Entity repetition
+         */
+        $this->om->persist($event);
+        $this->om->flush();
+    }
+    
+    public function createAnnualy(Event $event, $finaldate)
+    {   
+        /**
+         * Add methode for create the same event each year  => use the Entity repetition
+         */
+        $this->om->persist($event);
+        $this->om->flush();
+    }
+    
     public function delete(Event $event)
     {
         $this->om->remove($event);
         $this->om->flush();
     }
-
+    
+    public function deleteAllRepetitions(Event $event)
+    {   
+        /**
+         * Add methode for delete all repetitions of an event => use the Entity repetition
+         */
+        $this->om->remove($event);
+        $this->om->flush();
+    }
+    
+    public function editAllRepetitions(Event $event)
+    {   
+        /**
+         * Add methode for edit all repetitions of an event => use the Entity repetition
+         */
+        $this->om->persist($event);
+        $this->om->flush();
+    }
+    
     public function edit(Event $event)
     {
         $this->om->persist($event);
         $this->om->flush();
     }
-
+   
     /**
      * @param mixed $object a Group, a Workspace, or a User
      * @param \DateTime $begin
